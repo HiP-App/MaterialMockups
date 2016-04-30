@@ -7,13 +7,14 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Overview" />
         <item
-            android:id="@+id/nav_routes"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Routes" />
-        <item
             android:id="@+id/nav_exhibit"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Exhibits" />
+        <item
+            android:id="@+id/nav_routes"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Routes" />
+
     </group>
 
     <item android:title="Other">
