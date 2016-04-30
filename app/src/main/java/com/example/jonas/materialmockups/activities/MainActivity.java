@@ -15,12 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.jonas.materialmockups.MyFab;
 import com.example.jonas.materialmockups.R;
+import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FloatingActionButton fab;
+    MyFab fab;
+    MaterialSheetFab materialSheetFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +32,26 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        // custom FAB
+        fab = (MyFab) findViewById(R.id.fab);
+        View sheetView = findViewById(R.id.fab_sheet);
+        View overlay = findViewById(R.id.dim_overlay);
+        int sheetColor = R.color.fab_sheet_color;
+        int fabColor = R.color.colorAccent;
+
+        // Initialize material sheet FAB
+        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay,
+                sheetColor, fabColor);
+
+        // standard FAB
+//        fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,10 +69,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
+        boolean didSomething = false;
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+            didSomething = true;
+        }
+
+        if (materialSheetFab.isSheetVisible()) {
+            materialSheetFab.hideSheet();
+            didSomething = true;
+        }
+
+        if ( ! didSomething ){
             super.onBackPressed();
         }
     }
