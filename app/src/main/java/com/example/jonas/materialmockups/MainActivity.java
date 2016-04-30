@@ -1,5 +1,6 @@
 package com.example.jonas.materialmockups;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -92,9 +93,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_exhibit) {
 
         } else if (id == R.id.nav_share) {
-
+            Toast.makeText(getApplicationContext(), "ACTION_SEND Intent with : Checkout HiP @ AppStore ...", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_licenses) {
-            Toast.makeText(getApplicationContext(), "Thanks to: ... (use separate activity)", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplication(), LicensingActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
