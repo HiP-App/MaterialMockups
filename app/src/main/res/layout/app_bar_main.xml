@@ -30,35 +30,7 @@
 
     <include layout="@layout/content_main" />
 
-    <!-- Audio Toolbar -->
-    <io.codetail.widget.RevealFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/reveal_items"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"  >
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:background="@android:drawable/ic_media_pause" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Pause" />
-            </LinearLayout>
-            <!-- Other 2 icons here-->
-
-        </LinearLayout>
-    </io.codetail.widget.RevealFrameLayout>
+    <include layout="@layout/audio_toolbar" />
 
     <!-- Custom FAB implementation -->
     <com.example.jonas.materialmockups.MyFab
