@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -34,12 +36,36 @@ public class MainActivity extends AppCompatActivity
     LinearLayout mRevealView;
     boolean hidden = true;
 
+    ImageButton btnPlayPause;
+    boolean isPlaying = true;
+
+    public void togglePlayPause() {
+        // remove old image first
+        btnPlayPause.setImageResource(android.R.color.transparent);
+
+        if (isPlaying)
+            btnPlayPause.setImageResource(R.drawable.ic_pause_black_24dp);
+        else
+            btnPlayPause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+
+        isPlaying = (! isPlaying);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        btnPlayPause = (ImageButton) findViewById(R.id.btnPlayPause);
+        btnPlayPause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+        btnPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglePlayPause();
+            }
+        });
 
         // custom FAB
         fab = (MyFab) findViewById(R.id.fab);
