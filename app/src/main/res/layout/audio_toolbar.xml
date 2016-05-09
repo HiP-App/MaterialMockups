@@ -26,15 +26,33 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:background="@drawable/icon_camera" />
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/ic_play_arrow_black_48dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Gallery" />
+                    android:text="Play/Pause" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Progress" />
             </LinearLayout>
 
             <LinearLayout
@@ -45,34 +63,15 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:background="@drawable/icon_video" />
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/ic_closed_caption_black_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Video" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:background="@drawable/icon_photo" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Photo" />
+                    android:text="Text" />
             </LinearLayout>
 
         </LinearLayout>
