@@ -42,11 +42,11 @@
         android:background="@android:color/white"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior" >
 
-        <TextView
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
-            android:text="@string/lorem_ipsum_100_words"/>
+            android:padding="16dp"/>
 
     </android.support.v4.widget.NestedScrollView>
 
