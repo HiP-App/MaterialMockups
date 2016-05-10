@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jonas.materialmockups.R;
+import com.example.jonas.materialmockups.fragments.MyBottomSheetFragment;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FloatingActionButton fab;
+
+    BottomSheetBehavior bottomSheetBehavior;
 
     LinearLayout mRevealView;
     boolean hidden = true;
@@ -57,14 +62,29 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        // Bottom Sheet
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        bottomSheetBehavior.setPeekHeight(300);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+
+        // Floating Action Button
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Test!", Snackbar.LENGTH_LONG).show();
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                // dialog
+//                BottomSheetDialogFragment bottomSheetDialogFragment = new MyBottomSheetFragment();
+//                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
             }
         });
 
+
+        // Play / Pause toggle
         btnPlayPause = (ImageButton) findViewById(R.id.btnPlayPause);
         btnPlayPause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         btnPlayPause.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +94,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        // generated
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -82,6 +104,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         // select first item on startup
         navigationView.getMenu().getItem(0).setChecked(true);

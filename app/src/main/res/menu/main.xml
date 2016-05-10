@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_audio"
-        android:icon="@drawable/ic_headset_white_48dp"
+        android:icon="@drawable/ic_headset_white_18dp"
         android:title="@string/action_audio"
         app:showAsAction="ifRoom" />
 
