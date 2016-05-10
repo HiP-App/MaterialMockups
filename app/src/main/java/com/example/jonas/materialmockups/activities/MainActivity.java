@@ -5,6 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,14 +18,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.jonas.materialmockups.MyFab;
 import com.example.jonas.materialmockups.R;
-import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
@@ -30,8 +30,7 @@ import io.codetail.animation.ViewAnimationUtils;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    MyFab fab;
-    MaterialSheetFab materialSheetFab;
+    FloatingActionButton fab;
 
     LinearLayout mRevealView;
     boolean hidden = true;
@@ -58,6 +57,14 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Test!", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
         btnPlayPause = (ImageButton) findViewById(R.id.btnPlayPause);
         btnPlayPause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         btnPlayPause.setOnClickListener(new View.OnClickListener() {
@@ -66,19 +73,6 @@ public class MainActivity extends AppCompatActivity
                 togglePlayPause();
             }
         });
-
-        // custom FAB
-        fab = (MyFab) findViewById(R.id.fab);
-        View sheetView = findViewById(R.id.fab_sheet);
-        View overlay = findViewById(R.id.dim_overlay);
-        int sheetColor = R.color.fab_sheet_color;
-        int fabColor = R.color.colorAccent;
-
-        // Initialize material sheet FAB
-        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay,
-                sheetColor, fabColor);
-
-        // end of FAB
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -103,20 +97,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
 
-        boolean didSomething = false;
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-            didSomething = true;
-        }
-
-        if (materialSheetFab.isSheetVisible()) {
-            materialSheetFab.hideSheet();
-            didSomething = true;
-        }
-
-        if ( ! didSomething ){
+        } else {
             super.onBackPressed();
         }
     }

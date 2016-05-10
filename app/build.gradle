@@ -26,10 +26,6 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
 
-    // FAB to card
-    compile 'com.gordonwong:material-sheet-fab:1.2.1'
-    compile 'com.android.support:cardview-v7:+'
-
     // card toolbar
     compile 'com.github.ozodrukh:CircularReveal:1.1.0'
 }
