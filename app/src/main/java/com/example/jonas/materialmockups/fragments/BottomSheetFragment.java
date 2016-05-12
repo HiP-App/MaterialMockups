@@ -1,30 +1,23 @@
 package com.example.jonas.materialmockups.fragments;
 
-
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.example.jonas.materialmockups.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Abstract class for fragments that are included in the bottom sheet of
+ * {@link ExhibitDetailsActivity}.
+ *
+ * Created by Jonas on 12.05.2016.
  */
-public class BottomSheetFragment extends Fragment {
+public abstract class BottomSheetFragment extends Fragment {
 
+    /**
+     * Called by ExhibitDetailsActivity when the bottom sheet has been expanded.
+     */
+    public void onBottomSheetExpand() {}
 
-    public BottomSheetFragment() {
-        // Required empty public constructor
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bottom_sheet, container, false);
-    }
+    /**
+     * Called by ExhibitDetailsActivity when the bottom sheet has been collapsed.
+     */
+    public void onBottomSheetCollapse() {}
 
 }

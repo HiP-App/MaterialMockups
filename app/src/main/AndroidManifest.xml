@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.ExhibitDetailsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,11 +21,11 @@
         <activity
             android:name=".activities.LicensingActivity"
             android:label="@string/title_activity_licensing"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName=".activities.ExhibitDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
+                android:value=".activities.ExhibitDetailsActivity" />
         </activity>
     </application>
 

@@ -22,12 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jonas.materialmockups.R;
-import com.example.jonas.materialmockups.fragments.BottomSheetFragment;
+import com.example.jonas.materialmockups.fragments.DummyPageFragment;
+import com.example.jonas.materialmockups.fragments.SimpleBottomSheetFragment;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
-public class MainActivity extends AppCompatActivity
+public class ExhibitDetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FloatingActionButton fab;
@@ -59,14 +60,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        // Bottom Sheet
-        View bottomSheet = findViewById(R.id.bottom_sheet);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        /*// Check that the activity is using the layout version with
-        // the fragment_container FrameLayout
-        if (findViewById(R.id.fragment_container) != null) {
+        // content
+        if (findViewById(R.id.content_fragment_container) != null) {
 
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else
@@ -76,7 +71,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             // Create a new Fragment to be placed in the activity layout
-            BottomSheetFragment firstFragment = new BottomSheetFragment();
+            DummyPageFragment firstFragment = new DummyPageFragment();
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -84,8 +79,35 @@ public class MainActivity extends AppCompatActivity
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
-        }*/
+                    .add(R.id.content_fragment_container, firstFragment).commit();
+        }
+
+        // Bottom Sheet
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        // Check that the activity is using the layout version with
+        // the fragment_container FrameLayout
+        if (findViewById(R.id.bottom_sheet_fragment_container) != null) {
+
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            // Create a new Fragment to be placed in the activity layout
+            SimpleBottomSheetFragment firstFragment = new SimpleBottomSheetFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.bottom_sheet_fragment_container, firstFragment).commit();
+        }
 
 
         // Floating Action Button
