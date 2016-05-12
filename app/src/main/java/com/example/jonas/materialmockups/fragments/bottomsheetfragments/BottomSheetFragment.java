@@ -1,10 +1,10 @@
-package com.example.jonas.materialmockups.fragments;
+package com.example.jonas.materialmockups.fragments.bottomsheetfragments;
 
 import android.support.v4.app.Fragment;
 
 /**
  * Abstract class for fragments that are included in the bottom sheet of
- * {@link ExhibitDetailsActivity}.
+ * {@link com.example.jonas.materialmockups.activities.ExhibitDetailsActivity}.
  *
  * Created by Jonas on 12.05.2016.
  */
