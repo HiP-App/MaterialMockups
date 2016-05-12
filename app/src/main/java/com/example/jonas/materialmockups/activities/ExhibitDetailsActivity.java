@@ -60,6 +60,9 @@ public class ExhibitDetailsActivity extends AppCompatActivity
     /** Extras contained in the Intent that started this activity */
     Bundle extras = null;
 
+    /** Stores the current action associated with the FAB */
+    BottomSheetConfig.FabAction fabAction;
+
 
     // ui elements
     FloatingActionButton fab;
@@ -111,12 +114,14 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED)
-                    setFabCollapseAction();
-                else if (newState == BottomSheetBehavior.STATE_COLLAPSED)
-                    setFabExpandAction();
-                else
-                    { /* we don't care about any other state */}
+                if (fabAction != BottomSheetConfig.FabAction.NEXT) {
+                    if (newState == BottomSheetBehavior.STATE_EXPANDED)
+                        setFabCollapseAction();
+                    else if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                        setFabExpandAction();
+                    else
+                        { /* we don't care about any other state */}
+                }
             }
 
             @Override
@@ -261,6 +266,7 @@ public class ExhibitDetailsActivity extends AppCompatActivity
     }
 
     private void setFabNextAction() {
+        fabAction = BottomSheetConfig.FabAction.NEXT;
         fab.setImageResource(R.drawable.ic_arrow_forward_white_48dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,6 +277,7 @@ public class ExhibitDetailsActivity extends AppCompatActivity
     }
 
     private void setFabExpandAction() {
+        fabAction = BottomSheetConfig.FabAction.EXPAND;
         fab.setImageResource(R.drawable.ic_expand_less_white_48dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,6 +288,7 @@ public class ExhibitDetailsActivity extends AppCompatActivity
     }
 
     private void setFabCollapseAction() {
+        fabAction = BottomSheetConfig.FabAction.COLLAPSE;
         fab.setImageResource(R.drawable.ic_expand_more_white_48dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
