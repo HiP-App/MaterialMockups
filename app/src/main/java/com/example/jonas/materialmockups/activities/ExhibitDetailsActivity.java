@@ -101,7 +101,8 @@ public class ExhibitDetailsActivity extends AppCompatActivity
             Intent intent = getIntent();
             extras = intent.getExtras();
             // TODO: extract pages from exhibit contained in intent instead of subsequent init
-            exhibitPages.add(new Page());
+            for (int noOfPages = 3; noOfPages > 0; noOfPages--)
+                exhibitPages.add(new Page());
         }
 
         // set up bottom sheet behavior
