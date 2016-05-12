@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.jonas.materialmockups.BottomSheetConfig;
 import com.example.jonas.materialmockups.Page;
+import com.example.jonas.materialmockups.PixelDpConversion;
 import com.example.jonas.materialmockups.R;
 import com.example.jonas.materialmockups.fragments.bottomsheetfragments.BottomSheetFragment;
 import com.example.jonas.materialmockups.fragments.exhibitpagefragments.ExhibitPageFactory;
@@ -211,11 +212,14 @@ public class ExhibitDetailsActivity extends AppCompatActivity
             // configure FAB
             setFabAction(config.fabAction);
 
-//            // configure peek height and max height
-//            bottomSheetBehavior.setPeekHeight(config.peekHeight);
-//            ViewGroup.LayoutParams params = bottomSheet.getLayoutParams();
-//            params.height = config.maxHeight;
-//            bottomSheet.setLayoutParams(params);
+            // configure peek height and max height
+            int peekHeightInPixels = (int) PixelDpConversion.convertDpToPixel(config.peekHeight);
+            bottomSheetBehavior.setPeekHeight(peekHeightInPixels);
+
+            int maxHeightInPixels = (int) PixelDpConversion.convertDpToPixel(config.maxHeight);
+            ViewGroup.LayoutParams params = bottomSheet.getLayoutParams();
+            params.height = maxHeightInPixels;
+            bottomSheet.setLayoutParams(params);
 
         } else {    // config.displayBottomSheet == false
             bottomSheet.setVisibility(View.GONE);
