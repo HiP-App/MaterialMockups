@@ -36,11 +36,14 @@ public class DummyExhibitPageFragment extends ExhibitPageFragment {
 
     @Override
     public BottomSheetConfig getBottomSheetConfig() {
-        BottomSheetConfig config = new BottomSheetConfig();
         SimpleBottomSheetFragment bsFragment = new SimpleBottomSheetFragment();
         bsFragment.setTitle("SimpleBottomSheetFragment #" + count);
         bsFragment.setDescription("you cannot use getString(id) here ...");
-        config.bottomSheetFragment = bsFragment;
+
+        BottomSheetConfig config = new BottomSheetConfig.Builder()
+                .bottomSheetFragment(bsFragment)
+                .getBottomSheetConfig();
+
         return config;
     }
 
