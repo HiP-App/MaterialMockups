@@ -1,5 +1,6 @@
 package com.example.jonas.materialmockups.fragments.exhibitpagefragments;
 
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 
 import com.example.jonas.materialmockups.BottomSheetConfig;
@@ -18,6 +19,13 @@ public abstract class ExhibitPageFragment extends Fragment {
         SLIDER,
         TEXT
     }
+
+    /** Uri pointing to the audio file that should be played */
+    private Uri audio = null;
+
+    public Uri getAudio() { return audio; }
+    public void setAudio(Uri audio) { this.audio = audio; }
+
 
     /** Returns the BottomSheetConfig for the PageFragment */
     public abstract BottomSheetConfig getBottomSheetConfig();
