@@ -170,6 +170,9 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         if (currentPageIndex >= exhibitPages.size())
             throw new IndexOutOfBoundsException("currentPageIndex >= exhibitPages.size() !");
 
+        // collapse bottom sheet first
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
         // set previous & next button
         if (currentPageIndex == 0)
             btnPreviousPage.setVisibility(View.GONE);
@@ -226,6 +229,7 @@ public class ExhibitDetailsActivity extends AppCompatActivity
             ViewGroup.LayoutParams params = bottomSheet.getLayoutParams();
             params.height = maxHeightInPixels;
             bottomSheet.setLayoutParams(params);
+
 
         } else {    // config.displayBottomSheet == false
             bottomSheet.setVisibility(View.GONE);
