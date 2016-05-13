@@ -11,6 +11,7 @@
 
     <TextView
         style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
@@ -25,6 +26,7 @@
 
         <TextView
             style="@style/TextAppearance.AppCompat.Small"
+            android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/lorem_ipsum_200_words" />
