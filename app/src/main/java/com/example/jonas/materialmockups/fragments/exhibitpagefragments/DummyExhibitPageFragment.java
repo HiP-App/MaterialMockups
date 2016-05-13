@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.example.jonas.materialmockups.BottomSheetConfig;
 import com.example.jonas.materialmockups.R;
-import com.example.jonas.materialmockups.fragments.bottomsheetfragments.BottomSheetFragment;
 import com.example.jonas.materialmockups.fragments.bottomsheetfragments.SimpleBottomSheetFragment;
 
 /**
@@ -40,11 +39,9 @@ public class DummyExhibitPageFragment extends ExhibitPageFragment {
         bsFragment.setTitle("SimpleBottomSheetFragment #" + count);
         bsFragment.setDescription("you cannot use getString(id) here ...");
 
-        BottomSheetConfig config = new BottomSheetConfig.Builder()
+        return new BottomSheetConfig.Builder()
                 .bottomSheetFragment(bsFragment)
                 .getBottomSheetConfig();
-
-        return config;
     }
 
     @Override
