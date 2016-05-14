@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,7 +30,7 @@ import com.example.jonas.materialmockups.Page;
 import com.example.jonas.materialmockups.PixelDpConversion;
 import com.example.jonas.materialmockups.R;
 import com.example.jonas.materialmockups.fragments.bottomsheetfragments.BottomSheetFragment;
-import com.example.jonas.materialmockups.fragments.exhibitpagefragments.ExhibitPageFactory;
+import com.example.jonas.materialmockups.fragments.exhibitpagefragments.ExhibitPageFragmentFactory;
 import com.example.jonas.materialmockups.fragments.exhibitpagefragments.ExhibitPageFragment;
 
 import java.util.LinkedList;
@@ -52,26 +54,34 @@ public class ExhibitDetailsActivity extends AppCompatActivity
     private int currentPageIndex = 0;
 
     /** Indicates whether audio is currently played (true) or not (false) */
-    boolean isAudioPlaying = false;
+    private boolean isAudioPlaying = false;
 
     /** Indicates whether the audio toolbar is currently displayed (true) or not (false) */
-    boolean isAudioToolbarHidden = true;
+    private boolean isAudioToolbarHidden = true;
 
     /** Extras contained in the Intent that started this activity */
-    Bundle extras = null;
+    private Bundle extras = null;
 
     /** Stores the current action associated with the FAB */
-    BottomSheetConfig.FabAction fabAction;
+    private BottomSheetConfig.FabAction fabAction;
+
+    /** Tag used to identify the current ExhibitPageFragment in the FragmentManager */
+    public static final String TAG_CURRENT_FRAGMENT = "CURRENT_FRAGMENT";
+
+    /** Tag used to identify the current BottomSheetFragment in the FragmentManager */
+    public static final String TAG_CURRENT_BOTTOMSHEET_FRAGMENT = "CURRENT_BOTTOM_SHEET_FRAGMENT";
+
+    // keys for saving/accessing the state
 
 
     // ui elements
-    FloatingActionButton fab;
-    View bottomSheet;
-    BottomSheetBehavior bottomSheetBehavior;
-    LinearLayout mRevealView;
-    ImageButton btnPlayPause;
-    ImageButton btnPreviousPage;
-    ImageButton btnNextPage;
+    private FloatingActionButton fab;
+    private View bottomSheet;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private LinearLayout mRevealView;
+    private ImageButton btnPlayPause;
+    private ImageButton btnPreviousPage;
+    private ImageButton btnNextPage;
 
 
     @Override
@@ -98,14 +108,15 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         if (savedInstanceState != null) {
             // activity creation because of device rotation
             // TODO: handle device rotation
-            throw new UnsupportedOperationException("TODO: handle device rotation");
+            throw new UnsupportedOperationException("TODO: handle saved state (device rotation, ...)");
         } else {
             // activity creation because of intent
             Intent intent = getIntent();
             extras = intent.getExtras();
             // TODO: extract pages from exhibit contained in intent instead of subsequent init
+            exhibitPages.add(new Page(ExhibitPageFragment.Type.APPETIZER));
             for (int noOfPages = 3; noOfPages > 0; noOfPages--)
-                exhibitPages.add(new Page());
+                exhibitPages.add(new Page(ExhibitPageFragment.Type.IMAGE));
         }
 
         // set up bottom sheet behavior
@@ -187,17 +198,26 @@ public class ExhibitDetailsActivity extends AppCompatActivity
 
         // get ExhibitPageFragment for Page
         Page page = exhibitPages.get(currentPageIndex);
-        ExhibitPageFragment pageFragment = ExhibitPageFactory.getFragmentForExhibitPage(page);
+        ExhibitPageFragment pageFragment = ExhibitPageFragmentFactory.getFragmentForExhibitPage(page);
 
         if (pageFragment == null)
             throw new NullPointerException("pageFragment is null!");
 
         pageFragment.setArguments(extras);
 
-        // display fragment
+        // remove old fragment and display new fragment
         if (findViewById(R.id.content_fragment_container) != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_fragment_container, pageFragment).commit();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            // remove current fragment (if present)
+            Fragment currentFragment =
+                    getSupportFragmentManager().findFragmentByTag(TAG_CURRENT_FRAGMENT);
+            if (currentFragment != null)
+                transaction.remove(currentFragment);
+
+            // add new fragment
+            transaction.add(R.id.content_fragment_container, pageFragment, TAG_CURRENT_FRAGMENT);
+            transaction.commit();
         }
 
         // configure bottom sheet
@@ -212,10 +232,20 @@ public class ExhibitDetailsActivity extends AppCompatActivity
             if (sheetFragment == null)
                 throw new NullPointerException("sheetFragment is null!");
 
-            // display fragment
+            // remove old fragment and display new fragment
             if (findViewById(R.id.bottom_sheet_fragment_container) != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.bottom_sheet_fragment_container, sheetFragment).commit();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                // remove current fragment (if present)
+                Fragment currentFragment =
+                        getSupportFragmentManager().findFragmentByTag(TAG_CURRENT_BOTTOMSHEET_FRAGMENT);
+                if (currentFragment != null)
+                    transaction.remove(currentFragment);
+
+                // add new fragment
+                transaction.add(R.id.bottom_sheet_fragment_container, sheetFragment,
+                        TAG_CURRENT_BOTTOMSHEET_FRAGMENT);
+                transaction.commit();
             }
 
             // configure FAB
