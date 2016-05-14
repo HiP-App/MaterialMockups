@@ -11,6 +11,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -126,7 +127,7 @@ public class ExhibitDetailsActivity extends AppCompatActivity
             exhibitPages = (List<Page>) savedInstanceState.getSerializable(KEY_EXHIBIT_PAGES);
             currentPageIndex = savedInstanceState.getInt(KEY_CURRENT_PAGE_INDEX, 0);
             isAudioPlaying = savedInstanceState.getBoolean(KEY_AUDIO_PLAYING, false);
-            isAudioToolbarHidden = savedInstanceState.getBoolean(KEY_AUDIO_TOOLBAR_HIDDEN, true);
+            isAudioToolbarHidden = true;
             extras = savedInstanceState.getBundle(KEY_EXTRAS);
 
             if (exhibitPages == null)
@@ -167,6 +168,10 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         // audio toolbar
         mRevealView = (LinearLayout) findViewById(R.id.reveal_items);
         mRevealView.setVisibility(View.INVISIBLE);
+
+        // display audio toolbar on savedInstanceState:
+        // if (! isAudioToolbarHidden) showAudioToolbar();
+        // does not work because activity creation has not been completed?!
 
         // set up play / pause toggle
         btnPlayPause = (ImageButton) findViewById(R.id.btnPlayPause);
@@ -355,6 +360,105 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Shows the audio toolbar.
+     * @return true if the toolbar has been revealed, false otherwise.
+     */
+    private boolean showAudioToolbar() {
+        // check only if mRevealView != null. If isAudioToolbarHidden == true is also checked,
+        // the toolbar cannot be displayed on savedInstanceState
+        if (mRevealView != null) {
+            int cx = (mRevealView.getLeft() + mRevealView.getRight());
+            int cy = mRevealView.getTop();
+            int radius = Math.max(mRevealView.getWidth(), mRevealView.getHeight());
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+                SupportAnimator animator =
+                        ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(800);
+
+                mRevealView.setVisibility(View.VISIBLE);
+                animator.start();
+
+            } else {
+                Animator anim = android.view.ViewAnimationUtils
+                        .createCircularReveal(mRevealView, cx, cy, 0, radius);
+                mRevealView.setVisibility(View.VISIBLE);
+                anim.start();
+            }
+
+            isAudioToolbarHidden = false;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Hides the audio toolbar.
+     * @return true if the audio toolbar was hidden, false otherwise
+     */
+    private boolean hideAudioToolbar() {
+        if (mRevealView != null) {
+            int cx = (mRevealView.getLeft() + mRevealView.getRight());
+            int cy = mRevealView.getTop();
+            int radius = Math.max(mRevealView.getWidth(), mRevealView.getHeight());
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+                SupportAnimator animator =
+                        ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(800);
+
+                SupportAnimator animator_reverse = animator.reverse();
+                animator_reverse.addListener(new SupportAnimator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart() {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd() {
+                        mRevealView.setVisibility(View.INVISIBLE);
+                        isAudioToolbarHidden = true;
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel() {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat() {
+
+                    }
+                });
+                animator_reverse.start();
+
+            } else {
+                Animator anim = android.view.ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, radius, 0);
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        mRevealView.setVisibility(View.INVISIBLE);
+                        isAudioToolbarHidden = true;
+                    }
+                });
+                anim.start();
+
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -377,76 +481,10 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.action_audio:
-
-                int cx = (mRevealView.getLeft() + mRevealView.getRight());
-//                int cy = (mRevealView.getTop() + mRevealView.getBottom())/2;
-                int cy = mRevealView.getTop();
-
-                int radius = Math.max(mRevealView.getWidth(), mRevealView.getHeight());
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-
-
-                    SupportAnimator animator =
-                            ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);
-                    animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                    animator.setDuration(800);
-
-                    SupportAnimator animator_reverse = animator.reverse();
-
-                    if (isAudioToolbarHidden) {
-                        mRevealView.setVisibility(View.VISIBLE);
-                        animator.start();
-                        isAudioToolbarHidden = false;
-                    } else {
-                        animator_reverse.addListener(new SupportAnimator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart() {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd() {
-                                mRevealView.setVisibility(View.INVISIBLE);
-                                isAudioToolbarHidden = true;
-
-                            }
-
-                            @Override
-                            public void onAnimationCancel() {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat() {
-
-                            }
-                        });
-                        animator_reverse.start();
-
-                    }
-                } else {
-                    if (isAudioToolbarHidden) {
-                        Animator anim = android.view.ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);
-                        mRevealView.setVisibility(View.VISIBLE);
-                        anim.start();
-                        isAudioToolbarHidden = false;
-
-                    } else {
-                        Animator anim = android.view.ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, radius, 0);
-                        anim.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                mRevealView.setVisibility(View.INVISIBLE);
-                                isAudioToolbarHidden = true;
-                            }
-                        });
-                        anim.start();
-
-                    }
-                }
-
+                if (isAudioToolbarHidden)
+                    showAudioToolbar();
+                else
+                    hideAudioToolbar();
                 return true;
 
             case android.R.id.home:
