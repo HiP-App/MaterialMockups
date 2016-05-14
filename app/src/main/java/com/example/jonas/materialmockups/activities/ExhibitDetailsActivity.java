@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +34,7 @@ import com.example.jonas.materialmockups.fragments.bottomsheetfragments.BottomSh
 import com.example.jonas.materialmockups.fragments.exhibitpagefragments.ExhibitPageFragmentFactory;
 import com.example.jonas.materialmockups.fragments.exhibitpagefragments.ExhibitPageFragment;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,9 +45,6 @@ import io.codetail.animation.ViewAnimationUtils;
 public class ExhibitDetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-    // key names for intent / savedState attributes
-    public static final String KEY_EXHIBIT = "exhibit-id";
 
     /** Stores the pages for the current exhibit */
     private List<Page> exhibitPages = new LinkedList<Page>();
@@ -72,7 +71,12 @@ public class ExhibitDetailsActivity extends AppCompatActivity
     public static final String TAG_CURRENT_BOTTOMSHEET_FRAGMENT = "CURRENT_BOTTOM_SHEET_FRAGMENT";
 
     // keys for saving/accessing the state
-
+    public static final String KEY_EXHIBIT_ID = "exhibit-id";
+    public static final String KEY_EXHIBIT_PAGES = "exhibitPages";
+    public static final String KEY_CURRENT_PAGE_INDEX = "currentPageIndex";
+    public static final String KEY_AUDIO_PLAYING = "isAudioPlaying";
+    public static final String KEY_AUDIO_TOOLBAR_HIDDEN = "isAudioToolbarHidden";
+    public static final String KEY_EXTRAS = "extras";
 
     // ui elements
     private FloatingActionButton fab;
@@ -85,6 +89,17 @@ public class ExhibitDetailsActivity extends AppCompatActivity
 
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable(KEY_EXHIBIT_PAGES, (Serializable) exhibitPages);
+        outState.putInt(KEY_CURRENT_PAGE_INDEX, currentPageIndex);
+        outState.putBoolean(KEY_AUDIO_PLAYING, isAudioPlaying);
+        outState.putBoolean(KEY_AUDIO_TOOLBAR_HIDDEN, isAudioToolbarHidden);
+        outState.putBundle(KEY_EXTRAS, extras);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -95,7 +110,7 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -106,9 +121,17 @@ public class ExhibitDetailsActivity extends AppCompatActivity
 
 
         if (savedInstanceState != null) {
-            // activity creation because of device rotation
-            // TODO: handle device rotation
-            throw new UnsupportedOperationException("TODO: handle saved state (device rotation, ...)");
+            // activity re-creation because of device rotation, instant run, ...
+
+            exhibitPages = (List<Page>) savedInstanceState.getSerializable(KEY_EXHIBIT_PAGES);
+            currentPageIndex = savedInstanceState.getInt(KEY_CURRENT_PAGE_INDEX, 0);
+            isAudioPlaying = savedInstanceState.getBoolean(KEY_AUDIO_PLAYING, false);
+            isAudioToolbarHidden = savedInstanceState.getBoolean(KEY_AUDIO_TOOLBAR_HIDDEN, true);
+            extras = savedInstanceState.getBundle(KEY_EXTRAS);
+
+            if (exhibitPages == null)
+                throw new NullPointerException("exhibitPages cannot be null!");
+
         } else {
             // activity creation because of intent
             Intent intent = getIntent();
@@ -455,6 +478,7 @@ public class ExhibitDetailsActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     public void togglePlayPause() {
         // remove old image first
